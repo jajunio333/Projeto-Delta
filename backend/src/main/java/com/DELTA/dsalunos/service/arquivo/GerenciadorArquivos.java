@@ -32,22 +32,15 @@ public class GerenciadorArquivos implements IGerenciadorArquivos {
 		UUID nameFile = UUID.randomUUID();
 		OutputStream outputStream = null;
 		try {
-			boolean directoryCreated = true;
 			byte[] imageByte = DatatypeConverter.parseBase64Binary(base64);
-			String pathFile = context.getRealPath("") + "resources\\static\\";
-			File directory = new File(pathFile);
-			if (!directory.exists()){
-				directoryCreated = directory.mkdir();
-			}
-			if(directoryCreated) {
-				String fileName = pathFile + nameFile.toString() + "." + extensionFileImages;
-				File file = new File(fileName);
-				file.createNewFile();
-				outputStream = new BufferedOutputStream(new FileOutputStream(file));
-				outputStream.write(imageByte);
-				outputStream.close();
-				return fileName;
-			}
+			String pathFile = context.getRealPath("");
+			String fileName = pathFile + nameFile.toString() + "." + extensionFileImages;
+			File file = new File(fileName);
+			file.createNewFile();
+			outputStream = new BufferedOutputStream(new FileOutputStream(file));
+			outputStream.write(imageByte);
+			outputStream.close();
+			return fileName;
 		}
 		catch (IOException e) {
 			e.printStackTrace();
