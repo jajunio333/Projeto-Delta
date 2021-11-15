@@ -12,20 +12,15 @@ function Search() {
         <h1 className="display-4">Pesquisar Aluno</h1>
         <Buscador/><br />
         <div className="container card w-25"><br />
-            <img className="card-img-top" src={logo} alt="Card image cap" height="300"/>
+            <img src={logo} alt="Card image cap" height="300"/>
           <div className="card-body">
-            <h5 className="card-title">Fulano de Tal</h5>
-            <p className="card-text">
-              Rua Maria Das Graças, numero 25.
-            </p>
+            Nome: <input type="text" value="Fulano de Tal" /> 
+            Endereço: <input type="text" value="Rua Pirapora, número 21" /> 
           </div>
-          <div className="card-body">
-            <a href="/" className="card-link">
-              Atualizar
-            </a>
-            <a href="/" className="card-link">
-              Deletar
-            </a>
+          <div className="container card-body">
+            <button type="button" className="btn btn-warning btn-lg">Atualizar</button>
+            &nbsp;
+            <button type="button" className="btn btn-danger btn-lg">Deletar</button>
           </div>
         </div>
       </div><br />

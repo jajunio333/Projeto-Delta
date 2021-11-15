@@ -36,16 +36,16 @@ public class AlunoController {
 	}
 	
 	@PostMapping("/novo-aluno")
-	public void createAluno(@RequestBody AlunoDTO alunoDTO) {
+	public void createAluno(@RequestBody AlunoDTO alunoDTO) throws SalvarDadoAlunoException {
 		 service.createAluno(alunoDTO);
 	} 
 	
-	@PutMapping("/alunos/{id}")
+	@PutMapping("/alunos/atualizar/{id}")
 	public void updateAluno(@RequestBody AlunoDTO alunoDTO) throws AlunoInexistenteException, SalvarDadoAlunoException {
 		 service.updateAluno(alunoDTO);
 	} 
 	
-	@DeleteMapping("/aluno/{id}")
+	@DeleteMapping("/aluno/delete/{id}")
 	public void deleteAluno(@PathVariable long id) throws AlunoInexistenteException, DeletarAlunoException {
 		service.deleteById(id);
 	}

@@ -1,60 +1,71 @@
 package com.DELTA.dsalunos.service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import javax.servlet.ServletContext;
 
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 import com.DELTA.dsalunos.dto.AlunoDTO;
 import com.DELTA.dsalunos.entities.Aluno;
 import com.DELTA.dsalunos.exception.AlunoInexistenteException;
 import com.DELTA.dsalunos.exception.DeletarAlunoException;
 import com.DELTA.dsalunos.exception.SalvarDadoAlunoException;
 import com.DELTA.dsalunos.repositories.AlunoRepository;
-import com.DELTA.dsalunos.utils.GerenciadorArquivos;
+import com.DELTA.dsalunos.service.arquivo.GerenciadorArquivos;
+import com.DELTA.dsalunos.service.arquivo.IGerenciadorArquivos;
 
 @Service
 public class AlunoService {
 	
-	@Autowired
-	private AlunoRepository repository;
+	private AlunoRepository alunoRepository;
+	
+	private IGerenciadorArquivos gerenciadorArquivos;
+	
+	public AlunoService(AlunoRepository alunoRepository, ServletContext context, Environment env) {
+		this.alunoRepository = alunoRepository;
+		gerenciadorArquivos = new GerenciadorArquivos(context, env); //Inicializado manualmente.
+	}
 	
 	
 	public List<AlunoDTO> findAll(){
-		List<Aluno> result = repository.findAll();
+		List<Aluno> result = alunoRepository.findAll();
 		return result.stream().map(x -> new AlunoDTO(x)).collect(Collectors.toList());
 	}
 	public AlunoDTO getAlunoById (long id) throws AlunoInexistenteException {
-		Aluno aluno = repository.getById(id);
+		Aluno aluno = alunoRepository.getById(id);
 		if (aluno != null) { 
-			String base64 = GerenciadorArquivos.recuperarArquivo(aluno.getFoto());
+			String base64 = gerenciadorArquivos.recuperarArquivo(aluno.getFoto());
 			return new AlunoDTO(aluno.getId(), aluno.getNome(), aluno.getEndereço(), base64);
 		}
 		else throw new AlunoInexistenteException(id);
 	}
-	public void createAluno (AlunoDTO alunoDTO) {
-		String idFoto = GerenciadorArquivos.criarArquivo(alunoDTO.getFoto());
-		Aluno aluno = new Aluno(alunoDTO.getNome(), alunoDTO.getEndereço(), idFoto);
-		repository.save(aluno);
+	public void createAluno (AlunoDTO alunoDTO) throws SalvarDadoAlunoException {
+		String idFoto = gerenciadorArquivos.criarArquivo(alunoDTO.getFoto());
+		if (!idFoto.isEmpty()) {
+			Aluno aluno = new Aluno(alunoDTO.getNome(), alunoDTO.getEndereço(), idFoto);
+			alunoRepository.save(aluno);
+		}
+		else throw new SalvarDadoAlunoException(alunoDTO.getId());
 	}
 	
 	public void updateAluno (AlunoDTO alunoDTO) throws AlunoInexistenteException, SalvarDadoAlunoException {
-		Aluno aluno = repository.getById(alunoDTO.getId());
-		if (aluno != null) { 
-			boolean arquivoAtualizou = GerenciadorArquivos.atualizarArquivo(aluno.getFoto(), alunoDTO.getFoto());
-			if (!arquivoAtualizou) {
-				 throw new SalvarDadoAlunoException(alunoDTO.getId());
-			}
+		Aluno aluno = alunoRepository.getById(alunoDTO.getId());
+		if (aluno != null) {
+			aluno.setNome(alunoDTO.getNome());
+			aluno.setEndereço(alunoDTO.getEndereço());
+			alunoRepository.save(aluno);
 		}
 		else throw new AlunoInexistenteException(alunoDTO.getId());
-	}	 
+	}
 	
 	public void deleteById (long id) throws AlunoInexistenteException, DeletarAlunoException {
-		Aluno aluno = repository.getById(id);
+		Aluno aluno = alunoRepository.getById(id);
 		if (aluno != null) { 
-			boolean arquivoDeletado = GerenciadorArquivos.deletarArquivo(aluno.getFoto());
+			boolean arquivoDeletado = gerenciadorArquivos.deletarArquivo(aluno.getFoto());
 			if (arquivoDeletado) {
-				repository.deleteById(id);
+				alunoRepository.deleteById(id);
 			}
 			else throw new DeletarAlunoException();
 		}
