@@ -33,7 +33,7 @@ public class AlunoController {
 	public ModelAndView handleException(HttpServletRequest req, Exception ex) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("body", new ErrorModel(ex.getMessage()));
-		return mav;
+		return mav;//não finalizado
 	}
 	
 	@GetMapping("/alunos")
