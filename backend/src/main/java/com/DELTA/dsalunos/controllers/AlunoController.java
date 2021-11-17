@@ -29,12 +29,12 @@ public class AlunoController {
 	@Autowired
 	private AlunoService service;
 	
-	@ExceptionHandler(AlunoException.class)
-	public ModelAndView handleException(HttpServletRequest req, Exception ex) {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("body", new ErrorModel(ex.getMessage()));
-		return mav;//não finalizado
-	}
+//	@ExceptionHandler(AlunoException.class)
+//	public ModelAndView handleException(HttpServletRequest req, Exception ex) {
+//		ModelAndView mav = new ModelAndView();
+//		mav.addObject("body", new ErrorModel(ex.getMessage()));
+//		return mav;
+//	}não finalizado
 	
 	@GetMapping("/alunos")
 	public ResponseEntity<List<AlunoDTO>> findAll(){
