@@ -16,14 +16,14 @@ public class Aluno {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String nome;
-	private String endereço;
+	private String endereco;
 	private String foto;
 	
 	
-	public Aluno (String nome, String endereço, String foto) {
+	public Aluno (String nome, String endereco, String foto) {
 		
 		this.nome = nome;
-		this.endereço = endereço;
+		this.endereco = endereco;
 		this.foto = foto;
 	}
 	
@@ -43,11 +43,11 @@ public class Aluno {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public String getEndereço() {
-		return endereço;
+	public String getendereco() {
+		return endereco;
 	}
-	public void setEndereço(String endereço) {
-		this.endereço = endereço;
+	public void setendereco(String endereco) {
+		this.endereco = endereco;
 	}
 	public String getFoto() {
 		return foto;

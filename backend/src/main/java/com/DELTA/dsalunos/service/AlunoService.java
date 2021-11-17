@@ -25,7 +25,7 @@ public class AlunoService {
 	
 	public AlunoService(AlunoRepository alunoRepository, ServletContext context, Environment env) {
 		this.alunoRepository = alunoRepository;
-		gerenciadorArquivos = new GerenciadorArquivos(context, env); //Inicializado manualmente.
+		gerenciadorArquivos = new GerenciadorArquivos(context, env); //Inicializado manualmente. 
 	}
 	
 	
@@ -34,17 +34,17 @@ public class AlunoService {
 		return result.stream().map(x -> new AlunoDTO(x)).collect(Collectors.toList());
 	}
 	public AlunoDTO getAlunoById (long id) throws AlunoInexistenteException {
-		Aluno aluno = alunoRepository.getById(id);
+		Aluno aluno = alunoRepository.findById(id).orElse(null);
 		if (aluno != null) { 
 			String base64 = gerenciadorArquivos.recuperarArquivo(aluno.getFoto());
-			return new AlunoDTO(aluno.getId(), aluno.getNome(), aluno.getEndereço(), base64);
+			return new AlunoDTO(aluno.getId(), aluno.getNome(), aluno.getendereco(), base64);
 		}
 		else throw new AlunoInexistenteException(id);
 	}
 	public void createAluno (AlunoDTO alunoDTO) throws SalvarDadoAlunoException {
 		String idFoto = gerenciadorArquivos.criarArquivo(alunoDTO.getFoto());
 		if (!idFoto.isEmpty()) {
-			Aluno aluno = new Aluno(alunoDTO.getNome(), alunoDTO.getEndereço(), idFoto);
+			Aluno aluno = new Aluno(alunoDTO.getNome(), alunoDTO.getendereco(), idFoto);
 			alunoRepository.save(aluno);
 		}
 		else throw new SalvarDadoAlunoException(alunoDTO.getId());
@@ -54,7 +54,7 @@ public class AlunoService {
 		Aluno aluno = alunoRepository.getById(alunoDTO.getId());
 		if (aluno != null) {
 			aluno.setNome(alunoDTO.getNome());
-			aluno.setEndereço(alunoDTO.getEndereço());
+			aluno.setendereco(alunoDTO.getendereco());
 			alunoRepository.save(aluno);
 		}
 		else throw new AlunoInexistenteException(alunoDTO.getId());

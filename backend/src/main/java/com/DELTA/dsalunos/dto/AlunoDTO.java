@@ -7,18 +7,18 @@ public class AlunoDTO  implements Serializable{
 	
 	private long id;
 	private String nome;
-	private String endereço;
+	private String endereco;
 	private String foto;
 	
-	public AlunoDTO(long id, String nome, String endereço, String foto) {
+	public AlunoDTO(long id, String nome, String endereco, String foto) {
 		this.id = id;
 		this.nome = nome;
-		this.endereço = endereço;
+		this.endereco = endereco;
 		this.foto = foto;
 	}
-	public AlunoDTO(String nome, String endereço, String foto) {
+	public AlunoDTO(String nome, String endereco, String foto) {
 		this.nome = nome;
-		this.endereço = endereço;
+		this.endereco = endereco;
 		this.foto = foto;
 	}
 	public AlunoDTO() {
@@ -27,7 +27,7 @@ public class AlunoDTO  implements Serializable{
 	public AlunoDTO (Aluno entity) {
 		id = entity.getId();
 		nome = entity.getNome();
-		endereço = entity.getEndereço();
+		endereco = entity.getendereco();
 		foto = entity.getFoto();
 	}
 	
@@ -47,12 +47,12 @@ public class AlunoDTO  implements Serializable{
 		this.nome = nome;
 	}
 
-	public String getEndereço() {
-		return endereço;
+	public String getendereco() {
+		return endereco;
 	}
 
-	public void setEndereço(String endereço) {
-		this.endereço = endereço;
+	public void setendereco(String endereco) {
+		this.endereco = endereco;
 	}
 
 	public String getFoto() {
